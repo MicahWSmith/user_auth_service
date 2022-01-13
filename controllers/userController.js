@@ -58,17 +58,18 @@ const authenticateUser = async (req, res) => {
     else if(type == "validate"){
 
         const token = req.body.token;
-    
-        const decode = jwt.verify(token, process.env.TOKEN_SECRET);
-
-        if(token){
-            res.json({
-                data: decode
+        
+        if(token) {
+            jwt.verify(token, process.env.TOKEN_SECRET, (err, result) => { 
+                return res.status(200).json({ 
+                    err: err, 
+                    result: result, 
+                }); 
             });
         }
-        else{
+        else {
             res.json({
-                data: 'invalid token'
+                result: 'invalid token'
             });
         }
 
