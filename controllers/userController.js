@@ -1,6 +1,9 @@
 // require the db created in the index file
 const db = require('../models/index')
+const jwt = require('jsonwebtoken');
 
+const dotenv = require('dotenv');
+dotenv.config();
 
 // get the Users model
 const User = db.Users
@@ -37,14 +40,43 @@ const authenticateUser = async (req, res) => {
         let password = req.body.password;
 
         let authUser = await User.findOne({where: {email: email, password: password}})
-        res.status(200).send(authUser)
+        
+        if(authUser){
+            const token = generateAccessToken(authUser.dataValues);
+            const responseData = {
+                userId: authUser.dataValues.id,
+                token: token
+            }
+            res.status(200).json(responseData);
+        }
+        else{
+            res.json({
+                error: "please check username and password are entered correctly"
+            })
+        }
     }
     else if(type == "validate"){
-        //TODO: compare users session token to stored session token
-        res.send("I need to write token validating code!!!");
+
+        const token = req.body.token;
+    
+        const decode = jwt.verify(token, process.env.TOKEN_SECRET);
+
+        if(token){
+            res.json({
+                data: decode
+            });
+        }
+        else{
+            res.json({
+                data: 'invalid token'
+            });
+        }
+
     }
     else{
-        res.send("Alas... nothing happened. Available endpoints for the auth route include 'validate' and 'login'");
+        res.json({
+            error: "Alas... nothing happened. Available endpoints for the auth route include 'validate' and 'login'"
+        });
     }
 }
 
@@ -62,6 +94,11 @@ const deleteUser = async (req, res) => {
     // using the builtin 'destroy' function on User Model
     await User.destroy({where :{id: id}})
     res.status(200).send(`User with id: ${id} is deleted`)
+}
+
+function generateAccessToken(param){
+    // NOTE: 3 minute default
+    return jwt.sign(param, process.env.TOKEN_SECRET, { expiresIn: '180s'});
 }
 
 // export all the controller functions
