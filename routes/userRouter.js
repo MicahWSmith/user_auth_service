@@ -10,13 +10,14 @@ router.post('/', userController.addUser)
 // get user and associated profile
 router.get('/:id', userController.getUser);
 
-// authenticate user
-router.get('/auth', userController.authenticateUser);
-
 // modify one user by id
 router.put('/:id', userController.updateUser)
 
 // delete one user by id
 router.delete('/:id', userController.deleteUser)
+
+// TODO:
+// authenticate user and send token / authenticate token
+router.post('/auth/:type', userController.authenticateUser);
 
 module.exports = router

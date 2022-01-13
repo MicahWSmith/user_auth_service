@@ -28,13 +28,24 @@ const getUser = async (req, res) => {
 }
 
 const authenticateUser = async (req, res) => {
-    
-    // getting vars from the params in the req
-    let email = req.body.email;
-    let password = req.body.password;
+    // type can be login or validate
+    let type = req.params.type;
 
-    let authUser = await User.findOne({where: {email: email, password: password}})
-    res.status(200).send(authUser)
+    if(type == "login"){
+        // getting vars from the params in the req
+        let email = req.body.email;
+        let password = req.body.password;
+
+        let authUser = await User.findOne({where: {email: email, password: password}})
+        res.status(200).send(authUser)
+    }
+    else if(type == "validate"){
+        //TODO: compare users session token to stored session token
+        res.send("I need to write token validating code!!!");
+    }
+    else{
+        res.send("Alas... nothing happened. Available endpoints for the auth route include 'validate' and 'login'");
+    }
 }
 
 const updateUser = async (req, res) => {
