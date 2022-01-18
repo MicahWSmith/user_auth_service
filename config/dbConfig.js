@@ -1,8 +1,8 @@
 // store the configuration secrets of the PG DB here
 module.exports = {
-    HOST: 'rds-activity-1.cj5hu7ak0gdn.us-east-1.rds.amazonaws.com', // your endpoint
-    USER: 'postgres', // your username
-    PASSWORD: 'postgres', // your password
-    DB: 'users_db', // your db name
+    HOST: 'ec2-52-73-29-239.compute-1.amazonaws.com', // your endpoint
+    USER: 'fwwuggpjefwywb', // your username
+    PASSWORD: 'b06cac665f167a5729ebf20d8474ceb950dfa52fc1ec72a033a184b1458687cf', // your password
+    DB: 'd14ohltn2gmdtb', // your db name
     dialect: 'postgres',
     }
