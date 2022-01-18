@@ -1,7 +1,10 @@
 // require the db created in the index file
 const db = require('../models/index')
+
+// In order to use jwt methods
 const jwt = require('jsonwebtoken');
 
+// in order to use our environment variable
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -40,13 +43,15 @@ const authenticateUser = async (req, res) => {
         let password = req.body.password;
 
         let authUser = await User.findOne({where: {email: email, password: password}})
-        
+        // CHECK IF USER IS VALID IN DB
         if(authUser){
+            // GENERATE TOKEN
             const token = generateAccessToken(authUser.dataValues);
             const responseData = {
                 userId: authUser.dataValues.id,
                 token: token
             }
+            // SEND THE RESPONSE WITH DATA
             res.status(200).json(responseData);
         }
         else{
@@ -60,6 +65,7 @@ const authenticateUser = async (req, res) => {
         const token = req.body.token;
         
         if(token) {
+            /// VERIFIED HERE ///
             jwt.verify(token, process.env.TOKEN_SECRET, (err, result) => { 
                 return res.status(200).json({ 
                     err: err, 
@@ -98,8 +104,7 @@ const deleteUser = async (req, res) => {
 }
 
 function generateAccessToken(param){
-    // NOTE: 3 minute default
-    return jwt.sign(param, process.env.TOKEN_SECRET, { expiresIn: '180s'});
+    return jwt.sign(param, process.env.TOKEN_SECRET, { expiresIn: '360s'});
 }
 
 // export all the controller functions
