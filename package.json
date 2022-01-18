@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Express service to authenticate users against user DB with 2FA",
   "main": "server.js",
+  "engines": {
+    "node": "16.13.1"
+  },
   "scripts": {
     "start": "node server.js"
   },
