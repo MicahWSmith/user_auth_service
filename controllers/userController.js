@@ -72,10 +72,19 @@ const authenticateUser = async (req, res) => {
         if(token) {
             /// VERIFIED HERE ///
             jwt.verify(token, process.env.TOKEN_SECRET, (err, result) => { 
-                return res.status(200).json({ 
-                    err: err, 
-                    result: result, 
-                }); 
+                if(err){return res.status(200).json({ 
+                        err: err, 
+                        result: result, 
+                    });
+                }
+                else{
+                    return res.status(200).json({ 
+                        id: result.id,
+                        email: result.email,
+                        phone: result.phone,
+                        profile: result.profile
+                    });
+                } 
             });
         }
         else {
