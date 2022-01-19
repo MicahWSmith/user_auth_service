@@ -9,8 +9,8 @@ app.use(express.urlencoded({ extended: true}));
 app.use(express.json())
 
 //routers
-const userRoutes = require('./routes/userRouter.js');
-app.use('/auth', userRoutes);
+const authRoutes = require('./routes/authRouter.js');
+app.use('/auth', authRoutes);
 
 const profileRoutes = require('./routes/profileRouter.js');
 app.use('/profiles', profileRoutes);
