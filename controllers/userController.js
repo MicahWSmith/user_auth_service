@@ -42,13 +42,18 @@ const authenticateUser = async (req, res) => {
         let email = req.body.email;
         let password = req.body.password;
 
-        let authUser = await User.findOne({where: {email: email, password: password}})
+        let authUser = await User.findOne({where: {email: email, password: password}, include: db.Profiles})
         // CHECK IF USER IS VALID IN DB
         if(authUser){
             // GENERATE TOKEN
+            let userData = {
+                id: authUser.dataValues.id,
+                email: authUser.dataValues.email,
+                phone: authUser.dataValues.phone,
+                profile: authUser.dataValues.profile
+            }
             const token = generateAccessToken(authUser.dataValues);
             const responseData = {
-                userId: authUser.dataValues.id,
                 token: token
             }
             // SEND THE RESPONSE WITH DATA
