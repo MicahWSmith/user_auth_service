@@ -52,7 +52,7 @@ const authenticateUser = async (req, res) => {
                 phone: authUser.dataValues.phone,
                 profile: authUser.dataValues.profile
             }
-            const token = generateAccessToken(authUser.dataValues);
+            const token = generateAccessToken(userData);
             const responseData = {
                 token: token
             }
