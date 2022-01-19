@@ -60,8 +60,8 @@ const authenticateUser = async (req, res) => {
             res.status(200).json(responseData);
         }
         else{
-            res.json({
-                error: "please check username and password are entered correctly"
+            res.status(204).json({
+                message: "User not found please check username and password are entered correctly"
             })
         }
     }
