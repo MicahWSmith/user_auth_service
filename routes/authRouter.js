@@ -1,23 +1,22 @@
 // the router file contains all the routes that can be accessed
-const userController = require('../controllers/userController.js')
+const authController = require('../controllers/authController.js')
 
 // create a Router object from express
 const router = require('express').Router()
 
 // add a new user to the table
-router.post('/', userController.addUser)
+router.post('/', authController.addUser)
 
 // get user and associated profile
-router.get('/:id', userController.getUser);
+router.get('/:id', authController.getUser);
 
 // modify one user by id
-router.put('/:id', userController.updateUser)
+router.put('/:id', authController.updateUser)
 
 // delete one user by id
-router.delete('/:id', userController.deleteUser)
+router.delete('/:id', authController.deleteUser)
 
-// TODO:
 // authenticate user and send token / authenticate token
-router.post('/auth/:type', userController.authenticateUser);
+router.post('/:type', authController.authenticateUser);
 
 module.exports = router

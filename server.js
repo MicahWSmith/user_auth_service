@@ -10,7 +10,7 @@ app.use(express.json())
 
 //routers
 const userRoutes = require('./routes/userRouter.js');
-app.use('/users', userRoutes);
+app.use('/auth', userRoutes);
 
 const profileRoutes = require('./routes/profileRouter.js');
 app.use('/profiles', profileRoutes);
