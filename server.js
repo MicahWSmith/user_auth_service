@@ -3,26 +3,8 @@ const cors = require('cors');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const readurl = require("url");
-const RedisStore = require("connect-redis")(session);
 
 require("dotenv").config();
-
-if(process.env.REDIS_URL){
-  var heredis = readurl.parse(process.env.REDIS_URL);
-
-  var redis = require('redis').createClient({ port: heredis.port, hostname: heredis.hostname });
-
-  redis.auth(heredis.auth.split(':')[1]);
-
-  console.log("redis url found");
-
-  redis.on('error', (e) => {
-    console.log(e);
-  })
-}
-else{
-  var redis = require('redis').createClient();
-}
 
 const app = express();
 
@@ -34,10 +16,6 @@ app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 
 app.use(session({
-  store: new RedisStore({
-    url: process.env.REDIS_URL,
-    client: redis
-  }),
   secret: 'my secret',
   resave: true,
   saveUninitialized: true,
