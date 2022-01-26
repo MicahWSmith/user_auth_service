@@ -11,8 +11,6 @@ function(req, res) {
     });
 });
 
-router.post('/', authController.authenticateUser);
-
 router.get('/data', authController.isLoggedIn, authController.getData);
 
 router.get('/logout', authController.logout);

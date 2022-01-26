@@ -14,27 +14,16 @@ const isLoggedIn = async (req, res, next) => {
 }
 
 const logout = (req, res) => {
-    req.session.destroy();
-    res.status(200);
-}
-
-const getData = async (req, res) => {
-    res.json({
-        userId: req.session.user
+    req.logOut();
+    res.status(200).json({
+        message: "logout success"
     });
 }
 
-const authenticateUser = async (req, res) => {
-
-        let email = req.body.email;
-        let password = req.body.password;
-
-        let authUser = await User.findOne({where: {email: email, password: password}, include: db.Profiles})
+const getData = async (req, res) => {
+    let authUser = await User.findOne({where: {email: req.session.passport.user}, include: db.Profiles});
         // CHECK IF USER IS VALID IN DB
         if(authUser){
-            req.session.user = authUser.dataValues.id;
-            req.session.email = authUser.dataValues.email;
-
             let userData = {
                 id: authUser.dataValues.id,
                 email: authUser.dataValues.email,
@@ -43,11 +32,15 @@ const authenticateUser = async (req, res) => {
             }
             res.status(200).json(userData);
         }
+        else{
+            res.status(200).json({
+                message: "user not found in DB"
+            });
+        }
 }
 
 // export all the controller functions
 module.exports = {
-    authenticateUser,
     isLoggedIn,
     logout,
     getData
