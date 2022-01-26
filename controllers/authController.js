@@ -5,7 +5,7 @@ const db = require('../models/index');
 const User = db.Users
 
 const isLoggedIn = async (req, res, next) => {
-    if(req.session.email){
+    if(req.isAuthenticated()){
         return next();
     }
     else{
