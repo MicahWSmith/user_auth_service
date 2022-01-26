@@ -2,6 +2,25 @@ const express =  require('express');
 const cors = require('cors');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const readurl = require("url");
+const RedisStore = require("connect-redis")(session);
+
+require("dotenv").config();
+
+if(process.env.REDIS_URL){
+  var heredis = readurl.parse(process.env.REDIS_URL);
+
+  var redis = require('redis').createClient({ port: heredis.port, hostname: heredis.hostname });
+
+  redis.auth(heredis.auth.split(':')[1]);
+
+  redis.on('error', (e) => {
+    console.log(e);
+  })
+}
+else{
+  var redis = require('redis').createClient();
+}
 
 const app = express();
 
@@ -14,10 +33,17 @@ app.use(express.json());
 
 app.set('trust proxy', 1);
 app.use(session({
-  secret: 'ssshhhhh',
+  store: new RedisStore({
+    client: redis
+  }),
+  secret: 'my secret',
   resave: false,
   saveUninitialized: false,
-  maxAge: 300000
+  cookie: {
+    maxAge: 300000,
+    sameSite: true,
+    secure: false
+  }
 }));
 
 app.use(bodyParser.json()); 
