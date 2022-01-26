@@ -14,6 +14,8 @@ if(process.env.REDIS_URL){
 
   redis.auth(heredis.auth.split(':')[1]);
 
+  console.log("redis url found");
+
   redis.on('error', (e) => {
     console.log(e);
   })
