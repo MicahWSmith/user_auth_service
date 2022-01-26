@@ -33,7 +33,8 @@ app.use(express.json());
 
 app.use(session({
   store: new RedisStore({
-    url: process.env.REDIS_URL
+    url: process.env.REDIS_URL,
+    client: redis
   }),
   secret: 'my secret',
   resave: true,
