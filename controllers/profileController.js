@@ -1,7 +1,6 @@
 // require the db created in the index file
 const db = require('../models/index')
 
-
 // get the Profiles model
 const Profile = db.Profiles
 
