@@ -23,7 +23,9 @@ app.use(session({
   secret: 'my secret',
   resave: false,
   saveUninitialized: false,
-  maxAge: 300000,
+  cookie: {
+    expires: 300000
+  }
 }));
 
 app.use(cors());

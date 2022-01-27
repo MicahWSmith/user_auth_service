@@ -6,6 +6,7 @@ const User = db.Users
 
 const isLoggedIn = async (req, res, next) => {
     if(req.isAuthenticated()){
+        console.log("///////////////////// ",req.session.passport);
         return next();
     }
     else{
