@@ -15,7 +15,7 @@ const addUser = async (req, res) => {
      // using the builtin 'create' function on User Model
      const newUser = await User.create(input_data)
      
-     // send a 200 response with the created entry
+     // send a 200 response with the created entry user
      res.status(200).send(newUser)
 }
 
