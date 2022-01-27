@@ -22,7 +22,8 @@ const logout = (req, res) => {
 }
 
 const getData = async (req, res) => {
-    let authUser = await User.findOne({where: {email: req.session.passport.user}, include: db.Profiles});
+    try{
+        let authUser = await User.findOne({where: {email: req.session.passport.user}, include: db.Profiles});
         // CHECK IF USER IS VALID IN DB
         if(authUser){
             let userData = {
@@ -38,6 +39,12 @@ const getData = async (req, res) => {
                 message: "user not found in DB"
             });
         }
+    }
+    catch(error){
+        res.status(204).json({
+            error: error
+        });
+    }
 }
 
 // export all the controller functions

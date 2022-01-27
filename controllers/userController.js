@@ -5,18 +5,23 @@ const db = require('../models/index')
 const User = db.Users
 
 const addUser = async (req, res) => {
-    let input_data = {
-        email: req.body.email,
-        phone: req.body.phone,
-        password: req.body.password,
-        security_question: req.body.security_question,
-        security_answer: req.body.security_answer,
-     }
-     // using the builtin 'create' function on User Model
-     const newUser = await User.create(input_data)
-     
-     // send a 200 response with the created entry user
-     res.status(200).send(newUser)
+    try {
+        let input_data = {
+            email: req.body.email,
+            phone: req.body.phone,
+            password: req.body.password,
+            security_question: req.body.security_question,
+            security_answer: req.body.security_answer,
+         }
+         // using the builtin 'create' function on User Model
+         const newUser = await User.create(input_data)
+         
+         // send a 200 response with the created entry user
+         res.status(200).send(newUser)
+      } 
+      catch (error) {
+        res.status(204).json({ error: error});
+      }
 }
 
 const getUser = async (req, res) => {
