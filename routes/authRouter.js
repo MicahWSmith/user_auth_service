@@ -2,17 +2,11 @@
 const authController = require('../controllers/authController.js')
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
 
-router.post('/validate', passport.authenticate('local', { failureRedirect: '/' }),
-function(req, res) {
-    res.json({
-        message: "validated"
-    });
-});
+router.post('/getToken', authController.getLoginToken );
 
-router.get('/data', authController.isLoggedIn, authController.getData);
+router.post('/getData', authController.getTokenData );
 
-router.get('/logout', authController.logout);
+router.post('/logout', authController.logout);
 
 module.exports = router

@@ -4,23 +4,30 @@ const db = require('../models/index')
 // get the Users model
 const User = db.Users
 
+// password security crypto methods
+const cryptoController = require('./cryptoController');
+
 const addUser = async (req, res) => {
     try {
+        // generate salt and hashed password for user
+        const userPassData = cryptoController.saltHashPassword(req.body.password);
         let input_data = {
             email: req.body.email,
             phone: req.body.phone,
-            password: req.body.password,
+            password: userPassData.passwordHash,
             security_question: req.body.security_question,
             security_answer: req.body.security_answer,
+            salt: userPassData.salt
          }
          // using the builtin 'create' function on User Model
-         const newUser = await User.create(input_data)
-         
+         const newUser = await User.create(input_data);
          // send a 200 response with the created entry user
-         res.status(200).send(newUser)
+         res.status(200).json({
+             message: "user add success"
+         });
       } 
       catch (error) {
-        res.status(204).json({ error: error});
+        res.status(400).json({ error: error});
       }
 }
 

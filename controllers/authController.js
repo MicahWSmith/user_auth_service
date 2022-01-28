@@ -1,55 +1,96 @@
 // require the db created in the index file
 const db = require('../models/index');
 
+const jwt = require('jsonwebtoken');
+const dotenv = require ('dotenv');
+dotenv.config();
+
+// password security crypto methods
+const cryptoController = require('./cryptoController');
+
 // get the Users model
 const User = db.Users
 
-const isLoggedIn = async (req, res, next) => {
-    if(req.isAuthenticated()){
-        console.log("///////////////////// ",req.session.passport);
-        return next();
-    }
-    else{
-        return res.status(400).json({"statusCode" : 400, "message" : "not authenticated"});
-    }
-}
-
 const logout = (req, res) => {
-    req.logOut();
-    res.status(200).json({
-        message: "logout success"
-    });
+    // TODO somehow get rid of JWT
 }
 
-const getData = async (req, res) => {
+const getLoginToken = async (req, res) => {
     try{
-        let authUser = await User.findOne({where: {email: req.session.passport.user}, include: db.Profiles});
-        // CHECK IF USER IS VALID IN DB
+        // getting vars from the params in the req
+        const email = req.body.email;
+        const password = req.body.password;
+    
+        const authUser = await User.findOne({where: {email: email}});
+        
         if(authUser){
-            let userData = {
-                id: authUser.dataValues.id,
-                email: authUser.dataValues.email,
-                phone: authUser.dataValues.phone,
-                profile: authUser.dataValues.profile
+            // use db stored salt to check if password is a match
+            const salt = authUser.dataValues.salt
+            const inputPassData = cryptoController.sha512(password, salt);
+
+            // validate that the passwords match
+            if(inputPassData.passwordHash === authUser.dataValues.password){ 
+                // get desired user info and store in user data object
+                const userData = {
+                    id: authUser.dataValues.id,
+                }
+                // create token with user data encrypted
+                const token = generateToken(userData);
+    
+                // set response data to include token
+                const responseData = {
+                    token: token
+                }
+                // send token back in response
+                res.status(200).json(responseData);
             }
-            res.status(200).json(userData);
+            else{
+                res.status(400).json({
+                    error: "please check username and or password is entered correctly"
+                });
+            }
         }
         else{
-            res.status(200).json({
-                message: "user not found in DB"
+            res.status(400).json({
+                error: "please check username and or password is entered correctly"
             });
         }
-    }
-    catch(error){
-        res.status(204).json({
+    } catch(error){
+        res.status(400).json({
             error: error
         });
     }
 }
 
+const getTokenData = async (req, res) => {
+    try{
+        // get credentials from the request
+        const token = req.body.token;
+        const decode = jwt.verify(token, process.env.TOKEN_SECRET);
+        if(token){
+            res.json({
+                data: decode
+            });
+        }
+        else{
+            res.json({
+                data: 'invalid token'
+            });
+        }
+    } catch(error){
+        res.status(400).json({
+            error: error
+        });
+    }
+}
+
+function generateToken(param){
+    return jwt.sign(param, process.env.TOKEN_SECRET, { expiresIn: '300s'});
+}
+
 // export all the controller functions
 module.exports = {
-    isLoggedIn,
+    getLoginToken,
+    getTokenData,
     logout,
-    getData
 }

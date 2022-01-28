@@ -28,19 +28,15 @@
   "dependencies": {
     "body": "^5.1.0",
     "body-parser": "^1.19.1",
-    "connect-redis": "^6.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^11.0.0",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
-    "express-session-sqlite": "^2.0.10",
+    "jsonwebtoken": "^8.5.1",
     "parser": "^0.1.4",
-    "passport": "^0.5.2",
-    "passport-local": "^1.0.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
-    "redis": "^3.1.2",
     "sequelize": "^6.12.5",
     "url": "^0.11.0"
   }
