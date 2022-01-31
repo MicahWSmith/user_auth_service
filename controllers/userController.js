@@ -1,6 +1,7 @@
 // require the db created in the index file
 const db = require('../models/index')
 
+const axios = require('axios');
 // get the Users model
 const User = db.Users
 
@@ -21,6 +22,19 @@ const addUser = async (req, res) => {
          }
          // using the builtin 'create' function on User Model
          const newUser = await User.create(input_data);
+
+         // TODO: make call to external apis to establish new accounts
+         /*axios.post('/todos', {
+           todo: 'Buy the milk',
+         })
+         .then((res) => {
+           console.log(`statusCode: ${res.statusCode}`)
+           console.log(res)
+         })
+         .catch((error) => {
+           console.error(error)
+         })*/
+
          // send a 200 response with the created entry user
          res.status(200).json({
              message: "user add success"

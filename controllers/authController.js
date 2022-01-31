@@ -1,6 +1,5 @@
 // require the db created in the index file
 const db = require('../models/index');
-
 const jwt = require('jsonwebtoken');
 const dotenv = require ('dotenv');
 dotenv.config();
