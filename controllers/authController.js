@@ -94,6 +94,8 @@ const getUserData = async (req, res) => {
             if(authUser){
                 const userData = {
                     id: authUser.dataValues.id,
+                    first: authUser.dataValues.first,
+                    last: authUser.dataValues.last,
                     email: authUser.dataValues.email,
                     security_question: authUser.dataValues.security_question,
                     security_answer: authUser.dataValues.security_answer,
