@@ -13,6 +13,8 @@ const addUser = async (req, res) => {
         // generate salt and hashed password for user
         const userPassData = cryptoController.saltHashPassword(req.body.password);
         let input_data = {
+            first: req.body.first,
+            last: req.body.last,
             email: req.body.email,
             phone: req.body.phone,
             password: userPassData.passwordHash,

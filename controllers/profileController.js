@@ -6,8 +6,6 @@ const Profile = db.Profiles
 
 const addProfile = async (req, res) => {
     let input_data = {
-        first: req.body.first,
-        last: req.body.last,
         ssn: req.body.ssn,
         account_number: req.body.account_number,
         routing_number: req.body.routing_number,
