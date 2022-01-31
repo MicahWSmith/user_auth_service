@@ -38,6 +38,7 @@ const getLoginToken = async (req, res) => {
     
                 // set response data to include token
                 const responseData = {
+                    name: authUser.dataValues.first,
                     token: token
                 }
                 // send token back in response
