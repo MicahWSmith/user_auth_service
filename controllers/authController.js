@@ -84,6 +84,44 @@ const getTokenData = async (req, res) => {
     }
 }
 
+const getUserData = async (req, res) => {
+    try{
+        // get credentials from the request
+        const token = req.body.token;
+        const decode = jwt.verify(token, process.env.TOKEN_SECRET);
+        if(decode){
+
+            const authUser = await User.findOne({where: {id: decode.id}, include: db.Profiles});
+            if(authUser){
+                const userData = {
+                    id: authUser.dataValues.id,
+                    email: authUser.dataValues.email,
+                    security_question: authUser.dataValues.security_question,
+                    security_answer: authUser.dataValues.security_answer,
+                    profile: authUser.dataValues.profile
+                }
+                res.status(200).json({
+                    data: userData
+                });
+            }
+            else{
+                res.status(400).json({
+                    message: `user not found with the id ${decode.id}`
+                })
+            }
+        }
+        else{
+            res.json({
+                data: 'invalid token'
+            });
+        }
+    } catch(error){
+        res.status(400).json({
+            error: error
+        });
+    }
+}
+
 function generateToken(param){
     return jwt.sign(param, process.env.TOKEN_SECRET, { expiresIn: '300s'});
 }
@@ -92,5 +130,6 @@ function generateToken(param){
 module.exports = {
     getLoginToken,
     getTokenData,
+    getUserData,
     logout,
 }
