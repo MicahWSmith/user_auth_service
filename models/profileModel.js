@@ -8,14 +8,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true
         },
-        first: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        last: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         ssn: {
             type: DataTypes.STRING,
             allowNull: false
