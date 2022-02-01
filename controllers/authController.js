@@ -41,7 +41,6 @@ const getLoginToken = async (req, res) => {
                     token: token
                 }
                 // send token back in response
-                res.header('Authorization',token);
                 res.status(200).json(responseData);
             }
             else{
@@ -66,7 +65,6 @@ const getTokenData = async (req, res) => {
     try{
         // get credentials from the request
         let token;
-        if(req.header("Authorization")){ token = req.header("Authorization"); }
         if(req.body && req.body.token){ token = req.body.token; }
         const decode = jwt.verify(token, process.env.TOKEN_SECRET);
         if(token){
@@ -90,7 +88,6 @@ const getUserData = async (req, res) => {
     try{
         // get credentials from the request
         let token;
-        if(req.header("Authorization")){ token = req.header("Authorization"); }
         if(req.body && req.body.token){ token = req.body.token; }
         const decode = jwt.verify(token, process.env.TOKEN_SECRET);
         if(decode){
@@ -102,6 +99,7 @@ const getUserData = async (req, res) => {
                     first: authUser.dataValues.first,
                     last: authUser.dataValues.last,
                     email: authUser.dataValues.email,
+                    phone: authUser.dataValues.phone,
                     security_question: authUser.dataValues.security_question,
                     security_answer: authUser.dataValues.security_answer,
                     profile: authUser.dataValues.profile
