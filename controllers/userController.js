@@ -5,6 +5,8 @@ const axios = require('axios');
 // get the Users model
 const User = db.Users
 
+const auth = require('./authController');
+
 // password security crypto methods
 const cryptoController = require('./cryptoController');
 
@@ -48,27 +50,46 @@ const addUser = async (req, res) => {
 }
 
 const getUser = async (req, res) => {
-    let id = req.params.id;
+    try{
+        let id = auth.decryptToken(req.body.token).data.id;
+    
+        let foundUser = await User.findOne({where: {id: id}, include: db.Profiles});
+        res.status(200).send(foundUser);
 
-    let foundUser = await User.findOne({where: {id: id}, include: db.Profiles});
-    res.status(200).send(foundUser);
+    } catch(e){
+        res.status(400).json({
+            error: e
+        });
+    }
 }
 
 
 const updateUser = async (req, res) => {
-    let id = req.params.id
+    try{
+        let id = auth.decryptToken(req.body.token).data.id;
+    
+        const User = await User.update(req.body.user, { where: {id: id}});
+        res.status(200).send(User);
 
-    // using the builtin 'findAll' function on User Model
-    const User = await User.update(req.body, { where: {id: id}})
-    res.status(200).send(User)
+    } catch(e){
+        res.status(400).json({
+            error: e
+        });
+    }
 }
 
 const deleteUser = async (req, res) => {
-    let id = req.params.id
-
-    // using the builtin 'destroy' function on User Model
-    await User.destroy({where :{id: id}})
-    res.status(200).send(`User with id: ${id} is deleted`)
+    try{
+        let id = auth.decryptToken(req.body.token).data.id;
+    
+        // using the builtin 'destroy' function on User Model
+        await User.destroy({where :{id: id}});
+        res.status(200).send(`User with id: ${id} is deleted`);
+    } catch(e){
+        res.status(400).json({
+            error: e
+        });
+    }
 }
 
 // export all the controller functions

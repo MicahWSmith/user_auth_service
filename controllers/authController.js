@@ -38,10 +38,10 @@ const getLoginToken = async (req, res) => {
     
                 // set response data to include token
                 const responseData = {
-                    name: authUser.dataValues.first,
                     token: token
                 }
                 // send token back in response
+                res.header('Authorization',token);
                 res.status(200).json(responseData);
             }
             else{
@@ -65,7 +65,9 @@ const getLoginToken = async (req, res) => {
 const getTokenData = async (req, res) => {
     try{
         // get credentials from the request
-        const token = req.body.token;
+        let token;
+        if(req.header("Authorization")){ token = req.header("Authorization"); }
+        if(req.body && req.body.token){ token = req.body.token; }
         const decode = jwt.verify(token, process.env.TOKEN_SECRET);
         if(token){
             res.json({
@@ -87,7 +89,9 @@ const getTokenData = async (req, res) => {
 const getUserData = async (req, res) => {
     try{
         // get credentials from the request
-        const token = req.body.token;
+        let token;
+        if(req.header("Authorization")){ token = req.header("Authorization"); }
+        if(req.body && req.body.token){ token = req.body.token; }
         const decode = jwt.verify(token, process.env.TOKEN_SECRET);
         if(decode){
 
@@ -128,10 +132,15 @@ function generateToken(param){
     return jwt.sign(param, process.env.TOKEN_SECRET, { expiresIn: '300s'});
 }
 
+function decryptToken(token){
+    return jwt.verify(token, process.env.TOKEN_SECRET);
+}
+
 // export all the controller functions
 module.exports = {
     getLoginToken,
     getTokenData,
     getUserData,
     logout,
+    decryptToken
 }

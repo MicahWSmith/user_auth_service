@@ -1,5 +1,8 @@
 // require the db created in the index file
-const db = require('../models/index')
+const db = require('../models/index');
+
+// to decrypt JWT for user id
+const auth = require('./authController');
 
 // get the Profiles model
 const Profile = db.Profiles
