@@ -51,8 +51,8 @@ const addUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     try{
-        let id = auth.decryptToken(req.body.token).data.id;
-    
+        let id = auth.decryptToken(req.body.token).id;
+        console.log(id);
         let foundUser = await User.findOne({where: {id: id}, include: db.Profiles});
         res.status(200).send(foundUser);
 
@@ -66,7 +66,7 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try{
-        let id = auth.decryptToken(req.body.token).data.id;
+        let id = auth.decryptToken(req.body.token).id;
         const newData = {
             first: req.body.first,
             last: req.body.last,
@@ -88,7 +88,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try{
-        let id = auth.decryptToken(req.body.token).data.id;
+        let id = auth.decryptToken(req.body.token).id;
     
         // using the builtin 'destroy' function on User Model
         await User.destroy({where :{id: id}});

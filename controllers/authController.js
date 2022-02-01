@@ -4,14 +4,31 @@ const jwt = require('jsonwebtoken');
 const dotenv = require ('dotenv');
 dotenv.config();
 
+var INVALID_TOKENS = [];
+
 // password security crypto methods
 const cryptoController = require('./cryptoController');
 
 // get the Users model
 const User = db.Users
 
-const logout = (req, res) => {
-    // TODO somehow get rid of JWT
+const logout = async (req, res) => {
+    try{
+        // get credentials from the request
+        let token;
+        if(req.body && req.body.token){ token = req.body.token; }
+        // add users' token to list of invalid tokens for server to check
+        INVALID_TOKENS.push(token);
+
+        res.status(200).json({
+            message: "user signed out successfully"
+        });
+
+    } catch(error){
+        res.status(400).json({
+            error: error
+        });
+    }
 }
 
 const getLoginToken = async (req, res) => {
@@ -66,7 +83,7 @@ const getTokenData = async (req, res) => {
         // get credentials from the request
         let token;
         if(req.body && req.body.token){ token = req.body.token; }
-        const decode = jwt.verify(token, process.env.TOKEN_SECRET);
+        const decode = decryptToken(token);
         if(token){
             res.json({
                 data: decode
@@ -89,7 +106,7 @@ const getUserData = async (req, res) => {
         // get credentials from the request
         let token;
         if(req.body && req.body.token){ token = req.body.token; }
-        const decode = jwt.verify(token, process.env.TOKEN_SECRET);
+        const decode = decryptToken(token);
         if(decode){
 
             const authUser = await User.findOne({where: {id: decode.id}, include: db.Profiles});
@@ -131,7 +148,10 @@ function generateToken(param){
 }
 
 function decryptToken(token){
-    return jwt.verify(token, process.env.TOKEN_SECRET);
+    if(INVALID_TOKENS.indexOf(token) == -1){
+        return jwt.verify(token, process.env.TOKEN_SECRET);
+    }
+    //return jwt.verify(token, process.env.TOKEN_SECRET);
 }
 
 // export all the controller functions
@@ -140,5 +160,6 @@ module.exports = {
     getTokenData,
     getUserData,
     logout,
-    decryptToken
+    decryptToken,
+    INVALID_TOKENS
 }

@@ -9,7 +9,7 @@ const Profile = db.Profiles
 
 const addProfile = async (req, res) => {
     try{
-        const id = auth.decryptToken(req.body.token).data.id;
+        const id = auth.decryptToken(req.body.token).id;
         const input_data = {
             ssn: req.body.ssn,
             account_number: req.body.account_number,
@@ -34,7 +34,7 @@ const addProfile = async (req, res) => {
 
 const getProfile = async (req, res) => {
     try{
-        const id = auth.decryptToken(req.body.token).data.id;
+        const id = auth.decryptToken(req.body.token).id;
         const foundProfile = await Profile.findOne({where: {userId: id}});
         res.status(200).send(foundProfile);
     }
@@ -47,7 +47,7 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     try{
-        const id = auth.decryptToken(req.body.token).data.id;
+        const id = auth.decryptToken(req.body.token).id;
         const newData = {
             ssn: req.body.ssn,
             account_number: req.body.account_number,
@@ -70,7 +70,7 @@ const updateProfile = async (req, res) => {
 
 const deleteProfile = async (req, res) => {
     try{
-        const id = auth.decryptToken(req.body.token).data.id;
+        const id = auth.decryptToken(req.body.token).id;
     
         // using the builtin 'destroy' function on Profile Model
         await Profile.destroy({where :{userId: id}})
