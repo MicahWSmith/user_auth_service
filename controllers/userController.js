@@ -67,8 +67,16 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try{
         let id = auth.decryptToken(req.body.token).data.id;
-    
-        const User = await User.update(req.body.user, { where: {id: id}});
+        const newData = {
+            first: req.body.first,
+            last: req.body.last,
+            email: req.body.email,
+            phone: req.body.phone,
+            security_question: req.body.security_question,
+            security_answer: req.body.security_answer
+        }
+
+        const User = await User.update(newData, { where: {userId: id}});
         res.status(200).send(User);
 
     } catch(e){

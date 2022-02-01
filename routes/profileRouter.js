@@ -8,12 +8,12 @@ const router = require('express').Router()
 router.post('/', profileController.addProfile)
 
 // get profile
-router.get('/:id', profileController.getProfile);
+router.post('/get', profileController.getProfile);
 
 // modify one profile by id
-router.put('/:id', profileController.updateProfile)
+router.post('/update', profileController.updateProfile)
 
 // delete one profile by id
-router.delete('/:id', profileController.deleteProfile)
+router.post('/delete', profileController.deleteProfile)
 
 module.exports = router
