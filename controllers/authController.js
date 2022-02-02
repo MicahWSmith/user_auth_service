@@ -144,7 +144,7 @@ const getUserData = async (req, res) => {
 }
 
 function generateToken(param){
-    return jwt.sign(param, process.env.TOKEN_SECRET, { expiresIn: '300s'});
+    return jwt.sign(param, process.env.TOKEN_SECRET, { expiresIn: '30m'});
 }
 
 function decryptToken(token){
