@@ -2,13 +2,24 @@
 const db = require('../models/index')
 
 const axios = require('axios');
-// get the Users model
+// get the Users/profile model
 const User = db.Users
+const Profile = db.Profiles
 
 const auth = require('./authController');
 
 // password security crypto methods
 const cryptoController = require('./cryptoController');
+
+const randomString = function(len){
+    const charSet = '0123456789';
+    let randomString = '';
+    for (let i = 0; i < len; i++) {
+       let randomPoz = Math.floor(Math.random() * charSet.length);
+       randomString += charSet.substring(randomPoz,randomPoz+1);
+    };
+    return randomString;
+}
 
 const addUser = async (req, res) => {
     try {
@@ -26,6 +37,23 @@ const addUser = async (req, res) => {
          }
          // using the builtin 'create' function on User Model
          const newUser = await User.create(input_data);
+         
+         /// ADD NEW PROFILE FOR NEW USER ///
+
+         acctNum = randomString(10);
+         rtNum = randomString(9);
+
+         const profile_data = {
+            ssn: "",
+            account_number: acctNum,
+            routing_number: rtNum,
+            street_address: "",
+            city: "",
+            state: "",
+            userId: newUser.id,
+         }
+         // using the builtin 'create' function on Profile Model
+         const newProfile = await Profile.create(profile_data);
 
          // TODO: make call to external apis to establish new accounts
          /*axios.post('/todos', {
