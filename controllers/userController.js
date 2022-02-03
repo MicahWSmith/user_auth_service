@@ -104,7 +104,7 @@ const updateUser = async (req, res) => {
             security_answer: req.body.security_answer
         }
 
-        const User = await User.update(newData, { where: {userId: id}});
+        const User = await User.update(newData, { where: {id: id}});
         res.status(200).send(User);
 
     } catch(e){
