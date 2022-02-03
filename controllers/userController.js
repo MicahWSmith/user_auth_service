@@ -120,6 +120,7 @@ const deleteUser = async (req, res) => {
         let id = auth.decryptToken(req.body.token).id;
     
         // using the builtin 'destroy' function on User Model
+        await Profile.destroy({where :{userId: id}});
         await User.destroy({where :{id: id}});
         res.status(200).send(`User with id: ${id} is deleted`);
     } catch(e){

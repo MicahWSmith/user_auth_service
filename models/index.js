@@ -61,6 +61,6 @@ db.sequelize.sync({force: false}).then(() => {
 });
 
 db.Profiles.belongsTo(db.Users);
-db.Users.hasOne(db.Profiles, { onDelete: 'cascade' });
+db.Users.hasOne(db.Profiles);
 
 module.exports = db
