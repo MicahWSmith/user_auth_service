@@ -122,7 +122,9 @@ const deleteUser = async (req, res) => {
         // using the builtin 'destroy' function on User Model
         await Profile.destroy({where :{userId: id}});
         await User.destroy({where :{id: id}});
-        res.status(200).send(`User with id: ${id} is deleted`);
+        res.status(200).json({
+            message: `User with id: ${id} is deleted`
+        });
     } catch(e){
         res.status(400).json({
             error: e
