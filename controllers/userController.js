@@ -10,6 +10,7 @@ const auth = require('./authController');
 
 // password security crypto methods
 const cryptoController = require('./cryptoController');
+const { Profiles } = require('../models/index');
 
 const randomString = function(len){
     const charSet = '0123456789';
@@ -120,6 +121,7 @@ const deleteUser = async (req, res) => {
     
         // using the builtin 'destroy' function on User Model
         await User.destroy({where :{id: id}});
+        await Profile.destroy({where :{userId: id}});
         res.status(200).send(`User with id: ${id} is deleted`);
     } catch(e){
         res.status(400).json({
