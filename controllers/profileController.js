@@ -55,8 +55,8 @@ const updateProfile = async (req, res) => {
         }
 
         // using the builtin 'findAll' function on Profile Model
-        const Profile = await Profile.update(newData, { where: {userId: id}});
-        res.status(200).send(Profile);
+        const updatedProfile = await Profile.update(newData, { where: {userId: id}});
+        res.status(200).send(updatedProfile);
 
     } catch(e){
         res.status(400).json({

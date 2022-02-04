@@ -111,8 +111,8 @@ const updateUser = async (req, res) => {
             phone: req.body.phone,
         }
 
-        const User = await User.update(newData, { where: {id: id}});
-        res.status(200).send(User);
+        const updatedUser = await User.update(newData, { where: {id: id}});
+        res.status(200).send(updatedUser);
 
     } catch(e){
         res.status(400).json({
