@@ -49,9 +49,6 @@ const updateProfile = async (req, res) => {
     try{
         const id = auth.decryptToken(req.body.token).id;
         const newData = {
-            ssn: req.body.ssn,
-            account_number: req.body.account_number,
-            routing_number: req.body.routing_number,
             street_address: req.body.street_address,
             city: req.body.city,
             state: req.body.state,

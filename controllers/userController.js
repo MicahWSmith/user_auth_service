@@ -56,7 +56,9 @@ const addUser = async (req, res) => {
          // using the builtin 'create' function on Profile Model
          const newProfile = await Profile.create(profile_data);
 
-         // TODO: make call to external apis to establish new accounts
+         /// CALL EXTERNAL APIS TO MAKE ACCOUNTS ///
+
+         /// CASH ACCOUNT ///
         const acctresponse = await axios.post('https://bankaccountmicroservice.herokuapp.com/accounts/', {
             "balance": 0,
             "accountNumber": acctNum,
@@ -64,9 +66,19 @@ const addUser = async (req, res) => {
             "userId": newUser.id
         })
          .then(response => response.data)
-         .catch((error) => {
+        //  .catch((error) => {
+        //     res.status(400).json({ error: error});
+        //  })
+
+         /// PORTFOLIO ///
+        const portresponse = await axios.post('https://tp-portfolio-server.herokuapp.com/positions/', {
+            userId: newUser.id
+        })
+         .then(prtresponse => prtresponse.data)
+         /*.catch((error) => {
             res.status(400).json({ error: error});
-         })
+         })*/
+
         res.status(200).json({ message: "account added" });
       } 
       catch (error) {
@@ -97,8 +109,6 @@ const updateUser = async (req, res) => {
             last: req.body.last,
             email: req.body.email,
             phone: req.body.phone,
-            security_question: req.body.security_question,
-            security_answer: req.body.security_answer
         }
 
         const User = await User.update(newData, { where: {id: id}});
