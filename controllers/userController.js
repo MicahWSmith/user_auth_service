@@ -57,21 +57,21 @@ const addUser = async (req, res) => {
          const newProfile = await Profile.create(profile_data);
 
          // TODO: make call to external apis to establish new accounts
-         /*axios.post('/todos', {
-           todo: 'Buy the milk',
-         })
+         axios.post('https://bankaccountmicroservice.herokuapp.com/accounts/', {
+            "balance": 0,
+            "accountNumber": acctNum,
+            "routingNumber": rtNum,
+            "userId": newUser.id
+        })
          .then((res) => {
-           console.log(`statusCode: ${res.statusCode}`)
-           console.log(res)
+           // send a 200 response with the created entry user
+           res.status(200).json({
+               message: "user add success"
+           });
          })
          .catch((error) => {
-           console.error(error)
-         })*/
-
-         // send a 200 response with the created entry user
-         res.status(200).json({
-             message: "user add success"
-         });
+            res.status(400).json({ error: error});
+         })
       } 
       catch (error) {
         res.status(400).json({ error: error});
