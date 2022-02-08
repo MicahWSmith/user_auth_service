@@ -13,6 +13,9 @@ router.post('/get', userController.getUser);
 // modify one user by id
 router.post('/update', userController.updateUser);
 
+// modify password
+router.post('/updatePassword', userController.updateUserPassword);
+
 // delete one user by id
 router.post('/delete', userController.deleteUser);
 

@@ -112,7 +112,30 @@ const updateUser = async (req, res) => {
         }
 
         const updatedUser = await User.update(newData, { where: {id: id}});
-        res.status(200).send(updatedUser);
+        res.status(200).json({
+            message: "user update success."
+        });
+
+    } catch(e){
+        res.status(400).json({
+            error: e
+        });
+    }
+}
+
+const updateUserPassword = async (req, res) => {
+    try{
+        let id = auth.decryptToken(req.body.token).id;
+        const newPassData = cryptoController.saltHashPassword(req.body.password);
+        const newData = {
+            password: newPassData.passwordHash,
+            salt: newPassData.salt
+        }
+
+        const updatedUser = await User.update(newData, { where: {id: id}});
+        res.status(200).json({
+            message: "user password update success."
+        });
 
     } catch(e){
         res.status(400).json({
@@ -143,5 +166,6 @@ module.exports = {
     addUser,
     getUser,
     updateUser,
+    updateUserPassword,
     deleteUser
 }
